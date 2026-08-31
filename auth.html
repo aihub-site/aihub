@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0f10">
+  <title>AIHUB — Вход</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./auth_files/css2" rel="stylesheet">
+  <script src="./auth_files/browser@4"></script>
+  
+  <!-- ИСПРАВЛЕНИЕ: Разрешаем прокрутку и задаем правильный фон -->
+  <style>
+    html, body {
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-y: auto !important; 
+        background-color: #0d0f10 !important;
+    }
+    
+    .auth-layout {
+        min-height: 100vh !important;
+        height: auto !important;
+    }
+    
+    .auth-main, .auth-card {
+        width: 100% !important;
+    }
+    
+    .auth-card {
+        margin: 20px auto !important;
+    }
+
+    /* Стили для сообщений об ошибках */
+    .auth-error-message {
+        background: rgba(244, 67, 54, 0.15);
+        border: 1px solid rgba(244, 67, 54, 0.3);
+        color: #ff7a74;
+        padding: 12px 15px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        display: none; /* Скрыто по умолчанию */
+    }
+    .auth-error-message.show {
+        display: block;
+    }
+  </style>
+
+  <style>/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden='until-found'])) {
+    display: none !important;
+  }
+}
+@layer utilities;
+</style>
+  <link rel="stylesheet" href="./auth_files/auth.css">
+  <link rel="icon" type="image/svg+xml" href="./auth_files/favicon.svg">
+</head>
+<body>
+  <main class="auth-layout">
+    <section class="auth-aside">
+      <a class="auth-brand" href="Index.html" aria-label="AIHUB — на главную"><img src="./auth_files/favicon.svg" alt="" style="width: 40px; height: 40px; border-radius: 13px;"><strong>AIHUB</strong></a>
+      <a class="auth-back" href="Index.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" aria-hidden="true" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg><span>На главную</span></a>
+      <div class="auth-message">
+        <div class="auth-liquid" aria-hidden="true"><span></span><span></span><span></span></div>
+        <h1>Создавайте без переключения между сервисами</h1>
+        <p>Текст, изображения и видео — в одном спокойном рабочем пространстве.</p>
+      </div>
+      <div class="auth-proof"><span class="proof-avatars"><i>М</i><i>А</i><i>К</i></span><p><strong>12 000+</strong> авторов уже используют AIHUB</p></div>
+    </section>
+
+    <section class="auth-main">
+      <div class="auth-card">
+        <div class="auth-copy">
+          <span class="auth-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="log-in" aria-hidden="true" class="lucide lucide-log-in"><path d="m10 17 5-5-5-5"></path><path d="M15 12H3"></path><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path></svg></span>
+          <h2>С возвращением</h2>
+          <p>Войдите, чтобы продолжить работу</p>
+        </div>
+
+        <!-- Блок для вывода ошибок -->
+        <div class="auth-error-message" id="auth-error"></div>
+
+        
+        <form id="auth-form" method="post" novalidate="">
+          <input type="hidden" name="mode" value="login">
+          <input type="hidden" name="csrf_token" value="623d39f9514921ec5ddda007801e3764b800739c83c3a15cdfbf68370bb7acda">
+                    <label><span>Email</span><input type="email" name="email" id="login-email" value="" placeholder="name@example.com" autocomplete="email" required=""></label>
+          <label><span>Пароль</span><span class="password-wrap"><input type="password" name="password" id="login-password" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password" required=""><button type="button" class="password-toggle" aria-label="Показать пароль"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="eye" aria-hidden="true" class="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg></button></span></label>
+                      <div class="auth-options"><label class="remember"><input type="checkbox" name="remember" checked=""><span></span>Запомнить меня</label><button type="button" id="forgot-password">Забыли пароль?</button></div>
+                    <button class="auth-submit" type="submit"><span>Войти в AIHUB</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+        </form>
+
+        <p class="auth-switch">
+          Нет аккаунта?          <a href="reg.html">Зарегистрироваться</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div class="auth-toast" id="auth-toast" hidden=""></div>
+  <script src="./auth_files/lucide.min.js.Без названия"></script>
+  <script>
+    const icons = () => window.lucide && window.lucide.createIcons({attrs:{'stroke-width':1.8}});
+    const toast = document.getElementById('auth-toast');
+    const errorBox = document.getElementById('auth-error');
+    
+    const showToast = message => {
+      toast.textContent = message;
+      toast.hidden = false;
+      requestAnimationFrame(() => toast.classList.add('visible'));
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => { toast.classList.remove('visible'); setTimeout(() => { toast.hidden = true; }, 220); }, 2600);
+    };
+
+    // Функция показа ошибки
+    const showError = (message) => {
+      errorBox.textContent = message;
+      errorBox.classList.add('show');
+    };
+
+    // Скрываем ошибку при вводе
+    const clearError = () => {
+      errorBox.classList.remove('show');
+    };
+
+    document.querySelectorAll('.password-toggle').forEach(button => button.addEventListener('click', () => {
+      const input = button.parentElement.querySelector('input');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      button.innerHTML = `<i data-lucide="${input.type === 'password' ? 'eye' : 'eye-off'}"></i>`;
+      icons();
+    }));
+
+    document.getElementById('forgot-password')?.addEventListener('click', () => showToast('Восстановление пароля появится в следующем обновлении'));
+
+    // ЛОГИКА ВХОДА
+    document.getElementById('auth-form').addEventListener('submit', (e) => {
+      e.preventDefault(); // Отменяем стандартную отправку формы
+      
+      clearError();
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      // Проверка Email по регулярному выражению
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        showError('Введите корректный email.');
+        return;
+      }
+
+      // Проверка пароля (минимум 8 символов)
+      if (password.length < 8) {
+        showError('Пароль должен содержать минимум 8 символов.');
+        return;
+      }
+
+      // Если проверки пройдены - переходим на Workspace.html
+      window.location.href = 'Workspace.html';
+    });
+
+    // Скрываем ошибку при вводе текста
+    document.getElementById('login-email').addEventListener('input', clearError);
+    document.getElementById('login-password').addEventListener('input', clearError);
+
+    icons();
+  </script>
+</body>
+</html>
