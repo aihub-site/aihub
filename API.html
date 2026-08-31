@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://aihub-site.github.io/aihub//api-docs.php -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0f10">
+  <title>API документация — AIHUB</title>
+  <meta name="description" content="Подробная документация OpenAI/Anthropic-совместимого API AIHUB для моделей GPT, Claude и Gemini с поддержкой режимов рассуждений.">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./AIHUB — API documentation_files/css2" rel="stylesheet">
+  <script src="./AIHUB — API documentation_files/browser@4"></script><style>/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden='until-found'])) {
+    display: none !important;
+  }
+}
+@layer utilities;
+</style>
+  <link rel="stylesheet" href="./AIHUB — API documentation_files/api-docs.css">
+  <link rel="icon" type="image/svg+xml" href="./AIHUB — API documentation_files/favicon.svg">
+<style>
+            .toast {
+                display: flex !important; /* Change to flex and add !important */
+                all: initial;
+                flex-direction: row !important;
+                align-items: center !important; /* Center vertically and add !important */
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+                padding: 20px 30px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(10px);
+                opacity: 0;
+
+                max-width: 500px; /* Set a max-width */
+                transition: opacity 0.5s ease-in-out;
+                font-size: 18px;
+                position: relative; /* For gradient overlay */
+
+                font-family: 'Open Sans', sans-serif; /* Apply Open Sans font */
+            }
+            .toast.show {
+                opacity: 1;
+            }
+            .toast.info::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, #020024, #090979, #00d4ff);
+                opacity: 0.6; /* Adjust opacity for glassmorphic effect */
+                border-radius: 10px;
+                z-index: -1; /* Place behind the content */
+            }
+            .toast.error {
+                background: rgba(244, 67, 54, 0.8) !important; /* Red glassmorphic background with transparency */
+                backdrop-filter: blur(10px) !important; /* Add blur effect for glassmorphic effect */
+            }
+            .toast.success {
+                background: rgba(76, 175, 80, 0.8) !important;
+            }
+            .toast.warning {
+                background: rgba(255, 152, 0, 0.8) !important;
+            }
+            .toast.info {
+                background: rgba(255, 255, 255, 0.1) !important;
+            }
+            .toast.default {
+                background: rgba(51, 51, 51, 0.8) !important;
+            }
+            .lds-ripple,
+            .lds-ripple div {
+                box-sizing: border-box;
+            }
+            .lds-ripple {
+                display: inline-block;
+                position: relative;
+                width: 40px;
+                height: 40px;
+                margin-left: 10px; /* Adjust margin to the left */
+                margin-right: -10px; /* Remove right margin */
+            }
+            .lds-ripple div {
+                position: absolute;
+                border: 4px solid #fff;
+                opacity: 1;
+                border-radius: 50%;
+                animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+            }
+            .lds-ripple div:nth-child(2) {
+                animation-delay: -0.5s;
+            }
+            @keyframes lds-ripple {
+                0% {
+                    top: 18px;
+                    left: 18px;
+                    width: 4px;
+                    height: 4px;
+                    opacity: 0;
+                }
+                4.9% {
+                    top: 18px;
+                    left: 18px;
+                    width: 4px;
+                    height: 4px;
+                    opacity: 0;
+                }
+                5% {
+                    top: 18px;
+                    left: 18px;
+                    width: 4px;
+                    height: 4px;
+                    opacity: 1;
+                }
+                100% {
+                    top: 0;
+                    left: 0;
+                    width: 40px;
+                    height: 40px;
+                    opacity: 0;
+                }
+            }
+        </style></head>
+<body>
+  <header class="docs-header">
+    <a class="docs-brand" href="index.html" aria-label="AIHUB — на главную"><img src="./AIHUB — API documentation_files/favicon.svg" alt=""><strong>AIHUB</strong><span>API</span></a>
+    <nav class="docs-nav" aria-label="Разделы документации">
+      <a href="#overview">Обзор</a>
+      <a href="#quickstart">Быстрый старт</a>
+      <a href="#models">Модели и режимы</a>
+      <a href="#integrations">Подключение</a>
+      <a href="#endpoints">Методы</a>
+      <a href="#errors">Ошибки</a>
+    </nav>
+    <a class="docs-header-action" href="Workspace.html#settings">Открыть настройки<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+    <button class="docs-menu-button" id="docs-menu-button" type="button" aria-expanded="false" aria-controls="docs-mobile-nav" aria-label="Открыть меню"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" aria-hidden="true" class="lucide lucide-menu"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button>
+    <div class="docs-mobile-nav" id="docs-mobile-nav" hidden="">
+      <a href="#overview">Обзор</a>
+      <a href="#quickstart">Быстрый старт</a>
+      <a href="#models">Модели и режимы</a>
+      <a href="#integrations">Подключение</a>
+      <a href="#endpoints">Методы</a>
+      <a href="#errors">Ошибки</a>
+      <a class="docs-mobile-primary" href="Workspace.html#settings">Открыть настройки</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="docs-hero" id="overview">
+      <div class="docs-hero-copy">
+        <span class="docs-eyebrow"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="braces" aria-hidden="true" class="lucide lucide-braces"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"></path><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"></path></svg>OpenAI-compatible API</span>
+        <h1>Подключите AIHUB к своему AI-агенту</h1>
+        <p>Используйте единый API для Codex и других клиентов, которые умеют работать с OpenAI-совместимыми Chat Completions и Responses.</p>
+        <div class="docs-hero-actions">
+          <a class="docs-primary-button" href="Workspace.html#settings">Открыть настройки<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="key-round" aria-hidden="true" class="lucide lucide-key-round"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></svg></a>
+          <a class="docs-secondary-button" href="#quickstart">Посмотреть пример<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-down" aria-hidden="true" class="lucide lucide-arrow-down"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg></a>
+        </div>
+      </div>
+      <div class="docs-endpoint-card">
+        <div><span>Base URL</span><strong>API v1</strong></div>
+        <div class="docs-copy-row"><code data-copy-value="https://aihub-site.github.io/aihub/api/v1">https://aihub-site.github.io/aihub/api/v1</code><button type="button" data-copy-button="" aria-label="Скопировать Base URL"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+        <ul>
+          <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"></path></svg>Bearer API-ключ</li>
+          <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"></path></svg>JSON-запросы и ответы</li>
+          <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="crown" aria-hidden="true" class="lucide lucide-crown"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>Доступ на тарифе Unlimited</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="docs-section" id="quickstart">
+      <div class="docs-section-heading"><span>01</span><div><h2>Быстрый старт</h2><p>Создайте ключ в настройках кабинета и передайте его в заголовке Authorization.</p></div></div>
+      <div class="docs-two-column">
+        <article class="docs-card steps-card">
+          <ol>
+            <li><span>1</span><div><strong>Откройте настройки</strong><p>В личном кабинете найдите раздел API.</p></div></li>
+            <li><span>2</span><div><strong>Сгенерируйте ключ</strong><p>Скопируйте секрет сразу после выпуска.</p></div></li>
+            <li><span>3</span><div><strong>Укажите Base URL</strong><p>Вставьте адрес и ключ в настройках вашего агента.</p></div></li>
+          </ol>
+        </article>
+        <article class="docs-card code-card">
+          <div class="code-card-head"><span>cURL</span><button type="button" data-copy-button="" data-copy-value="curl https://aihub-site.github.io/aihub/api/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;model&quot;:&quot;gpt-5.6-sol&quot;,&quot;reasoning_effort&quot;:&quot;high&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Привет!&quot;}]}&#39;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div>
+          <pre><code>curl https://aihub-site.github.io/aihub/api/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-5.6-sol","reasoning_effort":"high","messages":[{"role":"user","content":"Привет!"}]}'</code></pre>
+        </article>
+      </div>
+      <article class="docs-card agent-card">
+        <div><span class="docs-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="bot" aria-hidden="true" class="lucide lucide-bot"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></span><div><h3>Настройка AI-агента</h3><p>Для клиента с поддержкой OpenAI-compatible API укажите эти значения в его настройках провайдера.</p></div></div>
+        <div class="agent-values">
+          <div><span>OPENAI_BASE_URL</span><code>https://aihub-site.github.io/aihub/api/v1</code></div>
+          <div><span>OPENAI_API_KEY</span><code>YOUR_API_KEY</code></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="docs-section" id="models">
+      <div class="docs-section-heading"><span>02</span><div><h2>Текстовые модели и режимы рассуждений</h2><p>Передавайте <code>model</code> и <code>reasoning_effort</code> в запросах. API автоматически валидирует и применяет выбранную конфигурацию.</p></div></div>
+      
+      <div class="models-cards-grid">
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>GPT-5.6 Sol</strong><code>gpt-5.6-sol</code></div>
+            <p>Лучшая универсальная модель для кодинга, поиска ошибок и генерации текстов.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag highlight">high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>GPT-5.6 Terra</strong><code>gpt-5.6-terra</code></div>
+            <p>Модель для сложных программных проектов, архитектуры и системной аналитики.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag highlight">high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>GPT-5.6 Luna</strong><code>gpt-5.6-luna</code></div>
+            <p>Скоростная модель для быстрых ежедневных задач и коротких рефакторингов.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag highlight">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Claude Opus 5</strong><code>claude-opus-5</code></div>
+            <p>Флагман Anthropic с высочайшим уровнем логики, математики и анализа кодовых баз.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+              <span class="model-tag highlight">extra_high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Claude Fable 5</strong><code>claude-fable-5</code></div>
+            <p>Модель Anthropic для творческого программирования, документации и написания статей.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+              <span class="model-tag highlight">extra_high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Claude Opus 4.8</strong><code>claude-opus-4.8</code></div>
+            <p>Проверенная аналитическая модель с высокой стабильностью при следовании длинным промптам.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+              <span class="model-tag highlight">extra_high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Gemini 3.7 Flash</strong><code>gemini-3.7-flash</code></div>
+            <p>Сверхбыстрая модель Google с большим контекстным окном и высокой точностью ответов.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag highlight">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Gemini 3.6 Flash</strong><code>gemini-3.6-flash</code></div>
+            <p>Оптимизированная модель для мгновенных подсказок, автокомплита и ответов.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag highlight">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag">high</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-detail-card">
+          <div>
+            <div class="model-detail-head"><strong>Gemini 3.1 Pro</strong><code>gemini-3.1-pro</code></div>
+            <p>Продвинутая модель для многошаговых задач, анализа данных и структурированного JSON.</p>
+          </div>
+          <div>
+            <span class="model-modes-title">Режимы рассуждения:</span>
+            <div class="model-tags">
+              <span class="model-tag">auto</span>
+              <span class="model-tag">low</span>
+              <span class="model-tag">medium</span>
+              <span class="model-tag highlight">high</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="reasoning-modes-intro">
+        <div class="reasoning-mode-box">
+          <strong><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>low (fast / быстро)</strong>
+          <p>Минимальное время отклика. Подходит для простых вопросов и генерации короткого кода.</p>
+        </div>
+        <div class="reasoning-mode-box">
+          <strong><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>medium (средний)</strong>
+          <p>Оптимальный баланс между скоростью и глубиной проверки гипотез.</p>
+        </div>
+        <div class="reasoning-mode-box">
+          <strong><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="brain" aria-hidden="true" class="lucide lucide-brain"><path d="M12 18V5"></path><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4"></path><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5"></path><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77"></path><path d="M18 18a4 4 0 0 0 2-7.464"></path><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517"></path><path d="M6 18a4 4 0 0 1-2-7.464"></path><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77"></path></svg>high (deep / глубоко)</strong>
+          <p>Глубокое рассуждение и проверка краевых случаев перед выдачей ответа.</p>
+        </div>
+        <div class="reasoning-mode-box">
+          <strong><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" aria-hidden="true" class="lucide lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>extra_high (max)</strong>
+          <p>Усиленный режим сверхглубоких рассуждений (доступен для семейства Claude).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="docs-section" id="integrations">
+      <div class="docs-section-heading"><span>03</span><div><h2>Инструкции для агентов и IDE</h2><p>Выберите инструмент, откройте инструкцию и скопируйте готовые параметры подключения.</p></div></div>
+      <div class="integration-accordion">
+        <article class="integration-item open" data-integration="codex">
+          <button class="integration-trigger" type="button" aria-expanded="true">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="square-terminal" aria-hidden="true" class="lucide lucide-square-terminal"><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect></svg></span>
+            <span class="integration-title"><strong>Codex</strong><small>config.toml и Responses API</small></span>
+            <span class="integration-badge">Responses</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Добавьте провайдера AIHUB в <code>%USERPROFILE%\.codex\config.toml</code>, затем передайте ключ через переменную окружения.</p><a href="https://learn.chatgpt.com/docs/config-file/config-reference" target="_blank" rel="noopener">Справка Codex<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <div class="integration-code-grid">
+                <div class="integration-code"><div><span>config.toml</span><button type="button" data-copy-button="" data-copy-value="model = &quot;gpt-5.6-sol&quot;
+model_provider = &quot;aihub&quot;
+
+[model_providers.aihub]
+name = &quot;AIHUB&quot;
+base_url = &quot;https://aihub-site.github.io/aihub/api/v1&quot;
+env_key = &quot;AIHUB_API_KEY&quot;
+wire_api = &quot;responses&quot;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>model = "gpt-5.6-sol"
+model_provider = "aihub"
+
+[model_providers.aihub]
+name = "AIHUB"
+base_url = "https://aihub-site.github.io/aihub/api/v1"
+env_key = "AIHUB_API_KEY"
+wire_api = "responses"</code></pre></div>
+                <div class="integration-code"><div><span>PowerShell</span><button type="button" data-copy-button="" data-copy-value="$env:AIHUB_API_KEY = &quot;YOUR_API_KEY&quot;
+codex"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>$env:AIHUB_API_KEY = "YOUR_API_KEY"
+codex</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="cursor">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="mouse-pointer-2" aria-hidden="true" class="lucide lucide-mouse-pointer-2"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"></path></svg></span>
+            <span class="integration-title"><strong>Cursor</strong><small>Custom OpenAI Base URL</small></span>
+            <span class="integration-badge">Chat API</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Откройте <b>Cursor Settings → Models</b>, вставьте ключ в поле OpenAI API Key и включите <b>Override OpenAI Base URL</b>.</p><a href="https://docs.cursor.com/settings/api-keys" target="_blank" rel="noopener">Справка Cursor<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <ol class="integration-steps">
+                <li><span>1</span><div><strong>API Key</strong><p>Вставьте <code>YOUR_API_KEY</code> и нажмите Verify.</p></div></li>
+                <li><span>2</span><div><strong>Base URL</strong><p>Укажите <code>https://aihub-site.github.io/aihub/api/v1</code>.</p></div></li>
+                <li><span>3</span><div><strong>Модель</strong><p>Добавьте или выберите <code>gpt-5.6-sol</code>. Используйте режим чата; отдельные функции Cursor могут работать через его встроенные модели.</p></div></li>
+              </ol>
+              <div class="integration-value-row">
+                <code>https://aihub-site.github.io/aihub/api/v1</code><button type="button" data-copy-button="" data-copy-value="https://aihub-site.github.io/aihub/api/v1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Base URL</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="claude-code">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="code-2" aria-hidden="true" class="lucide lucide-code-2"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg></span>
+            <span class="integration-title"><strong>Claude Code</strong><small>Anthropic-совместимый /v1/messages</small></span>
+            <span class="integration-badge">Messages</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Задайте адрес шлюза и токен в PowerShell. Claude Code сам добавит путь <code>/v1/messages</code>.</p><a href="https://code.claude.com/docs/en/llm-gateway-connect" target="_blank" rel="noopener">Справка Claude Code<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <div class="integration-code single"><div><span>PowerShell</span><button type="button" data-copy-button="" data-copy-value="$env:ANTHROPIC_BASE_URL = &quot;https://aihub-site.github.io/aihub/api&quot;
+$env:ANTHROPIC_AUTH_TOKEN = &quot;YOUR_API_KEY&quot;
+claude --model claude-opus-5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>$env:ANTHROPIC_BASE_URL = "https://aihub-site.github.io/aihub/api"
+$env:ANTHROPIC_AUTH_TOKEN = "YOUR_API_KEY"
+claude --model claude-opus-5</code></pre></div>
+              <p class="integration-note"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="info" aria-hidden="true" class="lucide lucide-info"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>Для постоянной настройки те же переменные можно добавить в <code>%USERPROFILE%\.claude\settings.json</code>.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="vscode">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="panel-left" aria-hidden="true" class="lucide lucide-panel-left"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path></svg></span>
+            <span class="integration-title"><strong>VS Code</strong><small>Через расширение Continue</small></span>
+            <span class="integration-badge">Continue</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Установите Continue, откройте его локальный конфиг и сохраните этот блок в <code>%USERPROFILE%\.continue\config.yaml</code>.</p><a href="https://docs.continue.dev/customize/model-providers/top-level/openai" target="_blank" rel="noopener">Справка Continue<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <div class="integration-code single"><div><span>config.yaml</span><button type="button" data-copy-button="" data-copy-value="name: AIHUB
+version: 1.0.0
+schema: v1
+models:
+  - name: AIHUB GPT-5.6 Sol
+    provider: openai
+    model: gpt-5.6-sol
+    apiBase: https://aihub-site.github.io/aihub/api/v1
+    apiKey: YOUR_API_KEY
+    useResponsesApi: false
+    requestBody:
+      reasoning_effort: high
+    roles:
+      - chat
+      - edit
+      - apply"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>name: AIHUB
+version: 1.0.0
+schema: v1
+models:
+  - name: AIHUB GPT-5.6 Sol
+    provider: openai
+    model: gpt-5.6-sol
+    apiBase: https://aihub-site.github.io/aihub/api/v1
+    apiKey: YOUR_API_KEY
+    useResponsesApi: false
+    requestBody:
+      reasoning_effort: high
+    roles:
+      - chat
+      - edit
+      - apply</code></pre></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="antigravity">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="orbit" aria-hidden="true" class="lucide lucide-orbit"><path d="M20.341 6.484A10 10 0 0 1 10.266 21.85"></path><path d="M3.659 17.516A10 10 0 0 1 13.74 2.152"></path><circle cx="12" cy="12" r="3"></circle><circle cx="19" cy="5" r="2"></circle><circle cx="5" cy="19" r="2"></circle></svg></span>
+            <span class="integration-title"><strong>Google Antigravity</strong><small>Через совместимое расширение</small></span>
+            <span class="integration-badge muted">Extension</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Публичная документация Antigravity не описывает отдельное поле для произвольного OpenAI Base URL. Если сборка поддерживает VS Code-расширения, установите Continue и используйте конфиг ниже; иначе вызывайте API из терминала через cURL.</p><a href="https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity" target="_blank" rel="noopener">Справка Antigravity<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <div class="integration-code single"><div><span>config.yaml для Continue</span><button type="button" data-copy-button="" data-copy-value="name: AIHUB
+version: 1.0.0
+schema: v1
+models:
+  - name: AIHUB GPT-5.6 Sol
+    provider: openai
+    model: gpt-5.6-sol
+    apiBase: https://aihub-site.github.io/aihub/api/v1
+    apiKey: YOUR_API_KEY
+    useResponsesApi: false
+    requestBody:
+      reasoning_effort: high
+    roles:
+      - chat
+      - edit
+      - apply"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>name: AIHUB
+version: 1.0.0
+schema: v1
+models:
+  - name: AIHUB GPT-5.6 Sol
+    provider: openai
+    model: gpt-5.6-sol
+    apiBase: https://aihub-site.github.io/aihub/api/v1
+    apiKey: YOUR_API_KEY
+    useResponsesApi: false
+    requestBody:
+      reasoning_effort: high
+    roles:
+      - chat
+      - edit
+      - apply</code></pre></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="other-ide">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="blocks" aria-hidden="true" class="lucide lucide-blocks"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg></span>
+            <span class="integration-title"><strong>Другие IDE</strong><small>JetBrains и OpenAI-compatible клиенты</small></span>
+            <span class="integration-badge muted">Universal</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Для JetBrains установите Continue и используйте тот же <code>config.yaml</code>. В любом другом клиенте найдите настройки OpenAI-compatible provider и укажите три значения ниже.</p><a href="https://docs.continue.dev/reference" target="_blank" rel="noopener">Continue для IDE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div>
+              <div class="integration-code single compact"><div><span>.env / настройки провайдера</span><button type="button" data-copy-button="" data-copy-value="OPENAI_BASE_URL=https://aihub-site.github.io/aihub/api/v1
+OPENAI_API_KEY=YOUR_API_KEY
+OPENAI_MODEL=gpt-5.6-sol
+OPENAI_REASONING_EFFORT=high"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>OPENAI_BASE_URL=https://aihub-site.github.io/aihub/api/v1
+OPENAI_API_KEY=YOUR_API_KEY
+OPENAI_MODEL=gpt-5.6-sol
+OPENAI_REASONING_EFFORT=high</code></pre></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="integration-item" data-integration="curl">
+          <button class="integration-trigger" type="button" aria-expanded="false">
+            <span class="integration-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="braces" aria-hidden="true" class="lucide lucide-braces"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"></path><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"></path></svg></span>
+            <span class="integration-title"><strong>cURL и PowerShell</strong><small>Прямой запрос без IDE</small></span>
+            <span class="integration-badge">REST</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down integration-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="integration-panel">
+            <div class="integration-panel-inner">
+              <div class="integration-intro"><p>Подставьте ключ, выполните команду в терминале и получите JSON-ответ. На Windows можно использовать готовый вариант Invoke-RestMethod.</p></div>
+              <div class="integration-code-grid">
+                <div class="integration-code"><div><span>cURL</span><button type="button" data-copy-button="" data-copy-value="curl https://aihub-site.github.io/aihub/api/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;model&quot;:&quot;gpt-5.6-sol&quot;,&quot;reasoning_effort&quot;:&quot;high&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Привет!&quot;}]}&#39;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>curl https://aihub-site.github.io/aihub/api/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-5.6-sol","reasoning_effort":"high","messages":[{"role":"user","content":"Привет!"}]}'</code></pre></div>
+                <div class="integration-code"><div><span>PowerShell</span><button type="button" data-copy-button="" data-copy-value="$headers = @{
+  Authorization = &quot;Bearer YOUR_API_KEY&quot;
+  &quot;Content-Type&quot; = &quot;application/json&quot;
+}
+$body = @{
+  model = &quot;gpt-5.6-sol&quot;
+  reasoning_effort = &quot;high&quot;
+  messages = @(
+    @{ role = &quot;user&quot;; content = &quot;Привет!&quot; }
+  )
+} | ConvertTo-Json -Depth 4
+
+Invoke-RestMethod `
+  -Uri &quot;https://aihub-site.github.io/aihub/api/v1/chat/completions&quot; `
+  -Method Post `
+  -Headers $headers `
+  -Body $body"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div><pre><code>$headers = @{
+  Authorization = "Bearer YOUR_API_KEY"
+  "Content-Type" = "application/json"
+}
+$body = @{
+  model = "gpt-5.6-sol"
+  reasoning_effort = "high"
+  messages = @(
+    @{ role = "user"; content = "Привет!" }
+  )
+} | ConvertTo-Json -Depth 4
+
+Invoke-RestMethod `
+  -Uri "https://aihub-site.github.io/aihub/api/v1/chat/completions" `
+  -Method Post `
+  -Headers $headers `
+  -Body $body</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="docs-section" id="endpoints">
+      <div class="docs-section-heading"><span>04</span><div><h2>Методы API</h2><p>Базовые методы для диалогов, Responses-клиентов, Claude Code и получения списка моделей.</p></div></div>
+      <div class="endpoint-grid">
+        <article class="endpoint-item"><span class="method post">POST</span><code>/chat/completions</code><h3>Chat Completions</h3><p>Диалоговый формат с массивом messages.</p></article>
+        <article class="endpoint-item"><span class="method post">POST</span><code>/responses</code><h3>Responses</h3><p>Современный формат запросов для AI-агентов.</p></article>
+        <article class="endpoint-item"><span class="method post">POST</span><code>/messages</code><h3>Messages</h3><p>Anthropic-совместимый формат для Claude Code.</p></article>
+        <article class="endpoint-item"><span class="method get">GET</span><code>/models</code><h3>Models</h3><p>Список доступных идентификаторов моделей.</p></article>
+      </div>
+      <article class="docs-card request-card">
+        <div><h3>Обязательные заголовки</h3><p>Передавайте ключ как Bearer-токен. Для POST-запросов используйте JSON.</p></div>
+        <div class="header-chips"><code>Authorization: Bearer YOUR_API_KEY</code><code>Content-Type: application/json</code></div>
+      </article>
+    </section>
+
+    <section class="docs-section" id="errors">
+      <div class="docs-section-heading"><span>05</span><div><h2>Ошибки доступа</h2><p>API возвращает обычные HTTP-коды и объект error с понятным машинным кодом.</p></div></div>
+      <div class="docs-two-column error-layout">
+        <article class="docs-card error-copy-card">
+          <span class="error-status">403</span>
+          <h3>Нет Unlimited-подписки</h3>
+          <p>Ключ остаётся действительным, но запросы не выполняются, пока у владельца нет активного тарифа Unlimited.</p>
+          <a href="Workspace.html#settings">Перейти к настройкам<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+        </article>
+        <article class="docs-card code-card error-code-card">
+          <div class="code-card-head"><span>Ответ API</span><button type="button" data-copy-button="" data-copy-value="{
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;Нет активной подписки. API работает только на тарифе Unlimited. Подключите Unlimited в личном кабинете.&quot;,
+        &quot;type&quot;: &quot;subscription_error&quot;,
+        &quot;code&quot;: &quot;unlimited_subscription_required&quot;
+    }
+}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Копировать</button></div>
+          <pre><code>{
+    "error": {
+        "message": "Нет активной подписки. API работает только на тарифе Unlimited. Подключите Unlimited в личном кабинете.",
+        "type": "subscription_error",
+        "code": "unlimited_subscription_required"
+    }
+}</code></pre>
+        </article>
+      </div>
+      <div class="status-grid">
+        <article><strong>401</strong><div><h3>Неверный ключ</h3><p>Ключ отсутствует или больше не действует.</p></div></article>
+        <article><strong>403</strong><div><h3>Нужен Unlimited</h3><p>Нет активного доступа к API.</p></div></article>
+        <article><strong>429</strong><div><h3>Слишком часто</h3><p>Превышена частота запросов.</p></div></article>
+      </div>
+    </section>
+
+    <section class="docs-final-cta">
+      <div><span>Готовы подключить?</span><h2>Создайте ключ и отправьте первый запрос</h2><p>API-ключ привязан к вашему аккаунту и управляется в разделе настроек.</p></div>
+      <a class="docs-primary-button" href="Workspace.html#settings">Открыть настройки<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+    </section>
+  </main>
+
+  <footer class="docs-footer"><a class="docs-brand" href="index.html"><img src="./AIHUB — API documentation_files/favicon.svg" alt=""><strong>AIHUB</strong><span>API</span></a><p>OpenAI-compatible API для ваших AI-агентов.</p><a href="index.html">На главную</a></footer>
+  <div class="docs-toast" id="docs-toast" role="status" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"></path></svg><span>Скопировано</span></div>
+
+  <script src="./AIHUB — API documentation_files/lucide.min.js.Без названия"></script>
+  <script>
+    const renderIcons = () => window.lucide && window.lucide.createIcons({attrs:{'stroke-width':1.8}});
+    const toast = document.getElementById('docs-toast');
+    const showToast = message => {
+      toast.querySelector('span').textContent = message;
+      toast.classList.add('visible');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('visible'), 2100);
+    };
+    const copyText = async value => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(value);
+        else {
+          const field = document.createElement('textarea');
+          field.value = value; field.style.cssText = 'position:fixed;opacity:0'; document.body.append(field); field.select(); document.execCommand('copy'); field.remove();
+        }
+        showToast('Скопировано');
+      } catch (error) { showToast('Не удалось скопировать'); }
+    };
+    document.querySelectorAll('[data-copy-button]').forEach(button => button.addEventListener('click', () => {
+      const value = button.dataset.copyValue || button.parentElement.querySelector('[data-copy-value]')?.dataset.copyValue || '';
+      copyText(value);
+    }));
+    const integrationItems = [...document.querySelectorAll('.integration-item')];
+    integrationItems.forEach(item => item.querySelector('.integration-trigger')?.addEventListener('click', () => {
+      const shouldOpen = !item.classList.contains('open');
+      integrationItems.forEach(otherItem => {
+        const isOpen = otherItem === item && shouldOpen;
+        otherItem.classList.toggle('open', isOpen);
+        otherItem.querySelector('.integration-trigger')?.setAttribute('aria-expanded', String(isOpen));
+      });
+    }));
+    const menuButton = document.getElementById('docs-menu-button');
+    const mobileNav = document.getElementById('docs-mobile-nav');
+    const setMenu = open => {
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      menuButton.innerHTML = `<i data-lucide="${open ? 'x' : 'menu'}"></i>`;
+      if (open) { mobileNav.hidden = false; requestAnimationFrame(() => mobileNav.classList.add('visible')); }
+      else { mobileNav.classList.remove('visible'); setTimeout(() => { mobileNav.hidden = true; }, 260); }
+      renderIcons();
+    };
+    menuButton.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
+    mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    renderIcons();
+
+    // ДОБАВЛЕННЫЙ КОД: Плавная прокрутка по якорям
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
