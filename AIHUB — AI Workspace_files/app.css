@@ -490,3 +490,31 @@ svg { width: 20px; height: 20px; stroke-width: 1.8; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+/* Аварийное решение: включаем прокрутку, если контент не влез */
+html, body {
+    height: auto !important;
+    overflow-y: auto !important; /* Разрешаем прокрутку вниз */
+}
+
+.app-shell {
+    height: 100vh !important; /* Растягиваем на экран */
+    min-height: 640px !important; /* Но не даем сжаться меньше 640px */
+    overflow-y: auto !important; /* Прокрутка внутри, если экран меньше 640 */
+}
+
+/* Отключаем жесткие размеры композера */
+.chat-view {
+    --composer-height: auto !important;
+    height: 100% !important;
+}
+
+/* Панель ввода больше не прибита жестко к низу, а идет потоком */
+.composer {
+    position: relative !important; 
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    margin: 20px auto !important;
+    width: calc(100% - 32px) !important;
+    max-width: 900px !important;
+}
