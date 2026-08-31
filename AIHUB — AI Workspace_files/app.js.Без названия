@@ -1,0 +1,1039 @@
+(() => {
+  'use strict';
+
+  const appConfig = Object.freeze(window.APP_CONFIG || {});
+  let mediaLightbox = null;
+
+  const models = [
+    { id: 'gpt-56-sol', name: 'GPT-5.6 Sol', type: 'text', group: 'Текст', description: 'Лучшая универсальная', icon: 'sparkles', brand: 'openai', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'gpt-56-terra', name: 'GPT-5.6 Terra', type: 'text', group: 'Текст', description: 'Для сложных проектов', icon: 'earth', brand: 'openai', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'gpt-56-luna', name: 'GPT-5.6 Luna', type: 'text', group: 'Текст', description: 'Быстрые ежедневные задачи', icon: 'moon', brand: 'openai', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'claude-opus-5', name: 'Claude Opus 5', type: 'text', group: 'Текст', description: 'Высочайшая логика', icon: 'brain', brand: 'anthropic', reasoning: ['Авто', 'Глубоко'] },
+    { id: 'claude-fable-5', name: 'Claude Fable 5', type: 'text', group: 'Текст', description: 'Творческие тексты', icon: 'feather', brand: 'anthropic', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'claude-opus-48', name: 'Claude Opus 4.8', type: 'text', group: 'Текст', description: 'Надёжная аналитика', icon: 'brain-circuit', brand: 'anthropic', reasoning: ['Авто', 'Глубоко'] },
+    { id: 'gemini-37-flash', name: 'Gemini 3.7 Flash', type: 'text', group: 'Текст', description: 'Максимальная скорость', icon: 'sparkles', brand: 'gemini', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'gemini-36-flash', name: 'Gemini 3.6 Flash', type: 'text', group: 'Текст', description: 'Быстрые повседневные задачи', icon: 'zap', brand: 'gemini', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+    { id: 'gemini-31-pro', name: 'Gemini 3.1 Pro', type: 'text', group: 'Текст', description: 'Сложные задачи и анализ', icon: 'diamond', brand: 'gemini', reasoning: ['Авто', 'Быстро', 'Глубоко'] },
+
+    { id: 'nano-banana-pro', name: 'Nano Banana Pro', type: 'image', group: 'Изображения', description: 'Профессиональная детализация', icon: 'banana', brand: 'gemini', ratios: ['1:1', '4:5', '9:16', '16:9'], quality: ['2K', '4K'] },
+    { id: 'nano-banana-2', name: 'Nano Banana 2', type: 'image', group: 'Изображения', description: 'Фотореализм и детали', icon: 'banana', brand: 'gemini', ratios: ['1:1', '4:5', '9:16', '16:9'], quality: ['2K', '4K'] },
+    { id: 'gpt-image-2', name: 'GPT Image 2', type: 'image', group: 'Изображения', description: 'Текст и точные правки', icon: 'image', brand: 'openai', ratios: ['1:1', '4:5', '9:16', '16:9'], quality: ['2K', '4K'] },
+    { id: 'grok-imagine-image-2', name: 'Grok Imagine Image 2', type: 'image', group: 'Изображения', description: 'Выразительные изображения', icon: 'orbit', brand: 'x', ratios: ['1:1', '4:5', '9:16', '16:9'], quality: ['2K', '4K'] },
+    { id: 'seedream-5-pro', name: 'Seedream 5 Pro', type: 'image', group: 'Изображения', description: 'Фотореализм и композиция', icon: 'flower-2', brand: 'bytedance', ratios: ['1:1', '3:2', '2:3', '16:9'], quality: ['2K', '4K'] },
+    { id: 'recraft', name: 'Recraft', type: 'image', group: 'Изображения', description: 'Дизайн и векторная графика', icon: 'pen-tool', brand: 'recraft', ratios: ['1:1', '3:2', '2:3', '16:9'], quality: ['2K', '4K'] },
+    { id: 'flux-2', name: 'FLUX 2', type: 'image', group: 'Изображения', description: 'Сложные композиции', icon: 'blend', brand: 'flux', ratios: ['1:1', '3:2', '2:3', '16:9'], quality: ['2K', '4K'] },
+
+    { id: 'seedance-25', name: 'Seedance 2.5', type: 'video', group: 'Видео', description: 'Кинематографичная динамика', icon: 'clapperboard', brand: 'bytedance', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p', '4K'] },
+    { id: 'seedance-20', name: 'Seedance 2.0', type: 'video', group: 'Видео', description: 'Плавное движение', icon: 'film', brand: 'bytedance', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p'] },
+    { id: 'gemini-omni', name: 'Gemini Omni', type: 'video', group: 'Видео', description: 'Мультимодальная генерация', icon: 'sparkles', brand: 'gemini', ratios: ['16:9', '9:16', '1:1'], duration: [5, 8], quality: ['1080p', '4K'] },
+    { id: 'veo-31', name: 'Veo 3.1', type: 'video', group: 'Видео', description: 'Кинематографичные сцены', icon: 'clapperboard', brand: 'google', ratios: ['16:9', '9:16'], duration: [4, 6, 8], quality: ['1080p', '4K'] },
+    { id: 'pixverse-v6', name: 'PixVerse v6', type: 'video', group: 'Видео', description: 'Эффекты и стилизация', icon: 'wand-sparkles', brand: 'pixverse', ratios: ['16:9', '9:16', '1:1'], duration: [5, 8], quality: ['1080p', '4K'] },
+    { id: 'kling-30', name: 'Kling 3.0', type: 'video', group: 'Видео', description: 'Динамика и экшен', icon: 'video', brand: 'kling', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p', '4K'] },
+    { id: 'kling-26', name: 'Kling 2.6', type: 'video', group: 'Видео', description: 'Стабильное движение', icon: 'video', brand: 'kling', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p'] },
+    { id: 'kling-30-motion-control', name: 'Kling 3.0 Motion Control', type: 'video', group: 'Видео', description: 'Управление движением', icon: 'move-3d', brand: 'kling', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p', '4K'] },
+    { id: 'kling-26-motion-control', name: 'Kling 2.6 Motion Control', type: 'video', group: 'Видео', description: 'Контроль движения камеры', icon: 'scan', brand: 'kling', ratios: ['16:9', '9:16', '1:1'], duration: [5, 10], quality: ['1080p'] }
+  ];
+
+  const initialHistory = [];
+  const initialChats = [];
+
+  const storageKey = appConfig.storageKey || `ai-workspace-state-${appConfig.accountId || 'guest'}`;
+  const stored = readStoredState();
+  const state = {
+    view: 'chat',
+    model: models[0],
+    filters: { reasoning: 'Авто', ratio: '1:1', quality: '2K', duration: 5 },
+    history: Array.isArray(stored.history) ? stored.history : [...initialHistory],
+    historyFilter: 'all',
+    chats: Array.isArray(stored.chats) ? stored.chats : structuredClone(initialChats),
+    activeChatId: null,
+    generating: false,
+    attachments: []
+  };
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+  const icons = () => window.lucide && window.lucide.createIcons({ attrs: { 'stroke-width': 1.8 } });
+
+  function refreshLightbox() {
+    if (!window.GLightbox) return;
+    if (!mediaLightbox) {
+      mediaLightbox = window.GLightbox({
+        selector: '.media-lightbox',
+        touchNavigation: true,
+        closeOnOutsideClick: true,
+        autoplayVideos: false,
+        videosWidth: 'min(92vw, 1200px)',
+        plyr: { config: { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] } }
+      });
+    } else {
+      mediaLightbox.reload();
+    }
+  }
+
+  function openFallbackMediaViewer(link) {
+    const viewer = $('#media-viewer');
+    const stage = $('#media-viewer-stage');
+    if (!viewer || !stage) return;
+    const url = link.getAttribute('href');
+    const isVideo = link.dataset.type === 'video';
+    stage.innerHTML = isVideo
+      ? `<video src="${escapeHtml(url)}" controls autoplay playsinline preload="metadata"></video>`
+      : `<img src="${escapeHtml(url)}" alt="Результат генерации">`;
+    const media = stage.firstElementChild;
+    media?.addEventListener('error', () => {
+      stage.innerHTML = '<div class="media-viewer-missing"><i data-lucide="file-plus-2"></i><span>Медиафайл ещё не загружен в проект</span></div>';
+      icons();
+    }, { once: true });
+    viewer.hidden = false;
+    requestAnimationFrame(() => viewer.classList.add('is-open'));
+    document.body.classList.add('media-viewer-open');
+    icons();
+  }
+
+  function closeFallbackMediaViewer() {
+    const viewer = $('#media-viewer');
+    if (!viewer || viewer.hidden) return;
+    viewer.classList.remove('is-open');
+    document.body.classList.remove('media-viewer-open');
+    setTimeout(() => {
+      if (viewer.classList.contains('is-open')) return;
+      viewer.hidden = true;
+      $('#media-viewer-stage').innerHTML = '';
+    }, 220);
+  }
+
+  function fallbackOrientation(ratio = '1:1') {
+    const [width, height] = String(ratio).split(':').map(Number);
+    if (!width || !height) return 'square';
+    if (width / height > 1.1) return 'landscape';
+    if (width / height < 0.9) return 'portrait';
+    return 'square';
+  }
+
+  function setMediaOrientation(container, width, height) {
+    if (!container || !width || !height) return;
+    const orientation = width / height > 1.1 ? 'landscape' : width / height < 0.9 ? 'portrait' : 'square';
+    container.classList.remove('orientation-landscape', 'orientation-portrait', 'orientation-square');
+    container.classList.add(`orientation-${orientation}`);
+    const card = container.closest('.media-card');
+    card?.classList.remove('orientation-landscape', 'orientation-portrait', 'orientation-square');
+    card?.classList.add(`orientation-${orientation}`);
+  }
+
+  function bindResultMedia(root = document) {
+    $$('[data-result-media]', root).forEach(media => {
+      if (media.dataset.metadataBound === 'true') return;
+      media.dataset.metadataBound = 'true';
+      const container = media.closest('.media-result');
+      const readyEvent = media.tagName === 'VIDEO' ? 'loadedmetadata' : 'load';
+      const apply = () => setMediaOrientation(container, media.videoWidth || media.naturalWidth, media.videoHeight || media.naturalHeight);
+      media.addEventListener(readyEvent, apply, { once: true });
+      media.addEventListener('error', () => container?.classList.add('media-missing'), { once: true });
+      if ((media.tagName === 'IMG' && media.complete && media.naturalWidth) || (media.tagName === 'VIDEO' && media.readyState >= 1)) apply();
+    });
+    refreshLightbox();
+  }
+
+  function readStoredState() {
+    try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (error) { return {}; }
+  }
+
+  function persistState() {
+    try {
+      const chats = state.chats.map(chat => ({
+        ...chat,
+        messages: chat.messages.map(message => ({
+          ...message,
+          attachments: (message.attachments || []).map(({ name, type }) => ({ name, type }))
+        }))
+      }));
+      localStorage.setItem(storageKey, JSON.stringify({ history: state.history, chats }));
+    } catch (error) { /* Storage is optional for the demo. */ }
+  }
+
+  function modelClass(type) { return `${type}-model`; }
+  function getModel(id) { return models.find(model => model.id === id) || models[0]; }
+
+  const modelBrandAssets = Object.freeze({
+    openai: 'openai.svg',
+    anthropic: 'anthropic.svg',
+    gemini: 'gemini.svg',
+    google: 'google.svg',
+    x: 'x.svg',
+    bytedance: 'bytedance.svg',
+    recraft: 'recraft.svg',
+    flux: 'flux.svg',
+    pixverse: 'pixverse.svg',
+    kling: 'kling.svg'
+  });
+
+  function modelSymbolHtml(model) {
+    const asset = modelBrandAssets[model.brand];
+    if (asset) {
+      const src = `assets/icons/models/${asset}`;
+      return `<img src="${src}" alt="" class="model-brand-icon" onload="if(this.nextElementSibling)this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><i data-lucide="${model.icon}"></i>`;
+    }
+    return `<i data-lucide="${model.icon}"></i>`;
+  }
+
+  function openPopover(menu, trigger = null) {
+    if (!menu) return;
+    clearTimeout(menu.closeTimer);
+    menu.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => menu.classList.add('is-open')));
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
+    menu.closest('.custom-select')?.classList.add('open');
+  }
+
+  function closePopover(menu, trigger = null, immediate = false) {
+    if (!menu || menu.hidden) return;
+    clearTimeout(menu.closeTimer);
+    menu.classList.remove('is-open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    menu.closest('.custom-select')?.classList.remove('open');
+    if (immediate) { menu.hidden = true; return; }
+    menu.closeTimer = setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 290);
+  }
+
+  function closePopovers(except = null) {
+    const menus = [$('#model-menu'), $('#profile-menu'), ...$$('[data-filter-menu]'), ...$$('.custom-select-menu')];
+    menus.forEach(menu => {
+      if (!menu || menu === except) return;
+      const trigger = menu.id === 'model-menu'
+        ? $('#model-trigger')
+        : menu.id === 'profile-menu'
+          ? $('#profile-trigger')
+          : menu.matches('[data-filter-menu]')
+            ? $(`[data-filter-trigger="${menu.dataset.filterMenu}"]`)
+            : $('.custom-select-trigger', menu.closest('.custom-select'));
+      closePopover(menu, trigger);
+    });
+  }
+
+  function togglePopover(menu, trigger) {
+    const willOpen = menu.hidden || !menu.classList.contains('is-open');
+    closePopovers(willOpen ? menu : null);
+    if (willOpen) openPopover(menu, trigger); else closePopover(menu, trigger);
+  }
+
+  function renderModelMenu() {
+    const menu = $('#model-menu');
+    const groups = ['Текст', 'Изображения', 'Видео'];
+    menu.innerHTML = groups.map(group => `
+      <div class="model-group">
+        <div class="model-group-label">${group}</div>
+        ${models.filter(model => model.group === group).map(model => `
+          <button class="model-option ${model.id === state.model.id ? 'active' : ''}" type="button" data-model-id="${model.id}">
+            <span class="model-symbol ${modelClass(model.type)}">${modelSymbolHtml(model)}</span>
+            <span class="model-option-copy"><strong>${model.name}</strong><small>${model.description}</small></span>
+            ${model.id === state.model.id ? '<i class="model-check" data-lucide="check"></i>' : ''}
+          </button>`).join('')}
+      </div>`).join('');
+    icons();
+  }
+
+  function filterControl(key, icon, label, values, suffix = '') {
+    const current = state.filters[key];
+    return `
+      <div class="filter-control" data-filter-control="${key}">
+        <button class="filter-button" type="button" data-filter-trigger="${key}" aria-expanded="false">
+          <i data-lucide="${icon}"></i><span>${label}</span><strong>${escapeHtml(current)}${suffix}</strong><i data-lucide="chevron-down"></i>
+        </button>
+        <div class="filter-menu" data-filter-menu="${key}" hidden>
+          ${values.map(value => `<button class="${String(value) === String(current) ? 'active' : ''}" type="button" data-filter-value="${value}">${value}${suffix}${String(value) === String(current) ? '<i data-lucide="check"></i>' : ''}</button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function renderFilters() {
+    const container = $('#dynamic-filters');
+    container.style.animation = 'none';
+    void container.offsetWidth;
+    container.style.animation = '';
+    if (state.model.type === 'text') {
+      if (!state.model.reasoning.includes(state.filters.reasoning)) state.filters.reasoning = state.model.reasoning[0];
+      container.innerHTML = filterControl('reasoning', 'brain-circuit', 'Режим', state.model.reasoning);
+    } else if (state.model.type === 'image') {
+      if (!state.model.ratios.includes(state.filters.ratio)) state.filters.ratio = state.model.ratios[0];
+      if (!state.model.quality.includes(state.filters.quality)) state.filters.quality = state.model.quality[0];
+      container.innerHTML = filterControl('ratio', 'rectangle-horizontal', 'Формат', state.model.ratios) + filterControl('quality', 'badge-check', 'Качество', state.model.quality);
+    } else {
+      if (!state.model.ratios.includes(state.filters.ratio)) state.filters.ratio = state.model.ratios[0];
+      if (!state.model.duration.includes(Number(state.filters.duration))) state.filters.duration = state.model.duration[0];
+      if (!state.model.quality.includes(state.filters.quality)) state.filters.quality = state.model.quality[0];
+      container.innerHTML = filterControl('ratio', 'rectangle-horizontal', 'Формат', state.model.ratios) + filterControl('duration', 'timer', 'Длительность', state.model.duration, ' сек') + filterControl('quality', 'badge-check', 'Качество', state.model.quality);
+    }
+    icons();
+  }
+
+  function selectModel(id, { menuMotion = true } = {}) {
+    const model = getModel(id);
+    state.model = model;
+    $('#selected-model-name').textContent = model.name;
+    const symbol = $('.model-trigger .model-symbol');
+    symbol.className = `model-symbol ${modelClass(model.type)}`;
+    symbol.innerHTML = modelSymbolHtml(model);
+    const menu = $('#model-menu');
+    if (menuMotion) closePopover(menu, $('#model-trigger'));
+    else closePopover(menu, $('#model-trigger'), true);
+    renderFilters();
+    setTimeout(renderModelMenu, menuMotion ? 210 : 0);
+    icons();
+  }
+
+  function enhanceNativeSelects() {
+    $$('.setting-row select:not([data-enhanced])').forEach(select => {
+      select.dataset.enhanced = 'true';
+      select.classList.add('native-select-enhanced');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'custom-select';
+      select.parentNode.insertBefore(wrapper, select);
+      wrapper.append(select);
+      const trigger = document.createElement('button');
+      trigger.className = 'custom-select-trigger';
+      trigger.type = 'button';
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.innerHTML = `<span>${escapeHtml(select.options[select.selectedIndex].text)}</span><i data-lucide="chevron-down"></i>`;
+      const menu = document.createElement('div');
+      menu.className = 'custom-select-menu';
+      menu.hidden = true;
+      menu.innerHTML = [...select.options].map(option => `<button class="custom-select-option ${option.selected ? 'active' : ''}" type="button" data-select-value="${escapeHtml(option.value)}">${escapeHtml(option.text)}${option.selected ? '<i data-lucide="check"></i>' : ''}</button>`).join('');
+      wrapper.append(trigger, menu);
+    });
+    icons();
+  }
+
+  function showView(name) {
+    const target = $(`[data-view="${name}"]`);
+    if (!target) return;
+    state.view = name;
+    $$('.app-view').forEach(view => view.classList.toggle('active', view === target));
+    $$('.side-nav-link').forEach(link => link.classList.toggle('active', link.dataset.viewLink === name));
+    $$('.top-nav-link').forEach(link => link.classList.toggle('active', link.dataset.viewLink === name));
+    closeSidebar();
+    closePopovers();
+    if (name === 'history') renderHistory();
+    history.replaceState(null, '', `#${name}`);
+  }
+
+  function showToast(message, icon = 'check') {
+    const toast = $('#toast');
+    toast.innerHTML = `<i data-lucide="${icon}"></i><span>${escapeHtml(message)}</span>`;
+    icons();
+    toast.classList.add('visible');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove('visible'), 2200);
+  }
+
+  async function copyText(value, successMessage) {
+    if (!value) return;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+      showToast(successMessage, 'copy');
+    } catch (error) {
+      showToast('Не удалось скопировать', 'circle-alert');
+    }
+  }
+
+  async function generateApiKey() {
+    const button = $('#generate-api-key');
+    const value = $('#api-key-value');
+    const copyButton = $('#copy-api-key');
+    const note = $('#api-key-note');
+    if (!button || button.disabled) return;
+
+    button.disabled = true;
+    button.classList.add('is-loading');
+    button.innerHTML = '<i data-lucide="loader-circle"></i><span>Выпускаю ключ</span>';
+    icons();
+    try {
+      const response = await fetch('api/key.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': appConfig.csrfToken || '' },
+        body: '{}'
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.key) throw new Error(data.error || 'Не удалось выпустить ключ');
+
+      value.textContent = data.key;
+      value.dataset.copyValue = data.key;
+      value.classList.add('revealed');
+      copyButton.disabled = false;
+      copyButton.title = 'Скопировать API-ключ';
+      note.textContent = 'Скопируйте ключ сейчас: после обновления страницы полный секрет больше не будет показан.';
+      button.innerHTML = '<i data-lucide="refresh-cw"></i><span>Выпустить новый ключ</span>';
+      showToast('API-ключ создан', 'key-round');
+    } catch (error) {
+      button.innerHTML = '<i data-lucide="refresh-cw"></i><span>Повторить выпуск ключа</span>';
+      showToast(error.message || 'Не удалось выпустить ключ', 'circle-alert');
+    } finally {
+      button.disabled = false;
+      button.classList.remove('is-loading');
+      icons();
+    }
+  }
+
+  function openSubscriptionModal() {
+    const modal = $('#subscription-modal');
+    clearTimeout(modal.hideTimer);
+    modal.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('visible')));
+    setTimeout(() => $('#subscription-modal-action')?.focus(), 120);
+  }
+
+  function closeSubscriptionModal() {
+    const modal = $('#subscription-modal');
+    if (!modal || modal.hidden) return;
+    modal.classList.remove('visible');
+    clearTimeout(modal.hideTimer);
+    modal.hideTimer = setTimeout(() => { modal.hidden = true; }, 320);
+  }
+
+  function setSidebar(open) {
+    const sidebar = $('#sidebar');
+    const backdrop = $('#mobile-backdrop');
+    const button = $('#mobile-menu-button');
+    sidebar.classList.toggle('open', open);
+    backdrop.classList.toggle('visible', open);
+    button.classList.toggle('is-active', open);
+    button.setAttribute('aria-expanded', String(open));
+    button.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    button.innerHTML = `<i data-lucide="${open ? 'x' : 'menu'}"></i>`;
+    icons();
+  }
+
+  function closeSidebar() { setSidebar(false); }
+  function toggleSidebar() { setSidebar(!$('#sidebar').classList.contains('open')); }
+
+  function renderRecentChats() {
+    const list = $('#recent-list');
+    const block = $('#recent-block');
+    block.hidden = state.chats.length === 0;
+    list.innerHTML = state.chats.map(chat => `
+      <button class="recent-chat ${chat.id === state.activeChatId ? 'active' : ''}" type="button" data-chat-id="${escapeHtml(chat.id)}">
+        <span>${escapeHtml(chat.title)}</span><small>${escapeHtml(getModel(chat.modelId).name)} · ${escapeHtml(chat.time)}</small>
+      </button>`).join('');
+  }
+
+  function currentChat() { return state.chats.find(chat => chat.id === state.activeChatId) || null; }
+
+  function attachmentMediaMarkup(attachment, compact = false) {
+    const url = attachment.url ? escapeHtml(attachment.url) : '';
+    if (url && attachment.type.startsWith('image/')) return `<img src="${url}" alt="${escapeHtml(attachment.name)}">`;
+    if (url && attachment.type.startsWith('video/')) return `<video src="${url}" muted playsinline></video>`;
+    const icon = attachment.type.startsWith('video/') ? 'clapperboard' : attachment.type.startsWith('audio/') ? 'audio-lines' : compact ? 'paperclip' : 'file';
+    return `<span class="attachment-file"><i data-lucide="${icon}"></i></span>`;
+  }
+
+  function renderAttachmentStrip() {
+    const strip = $('#attachment-strip');
+    const hasAttachments = state.attachments.length > 0;
+    clearTimeout(strip.hideTimer);
+    if (hasAttachments) {
+      strip.hidden = false;
+      strip.innerHTML = state.attachments.map(attachment => `
+        <div class="attachment-preview" data-attachment-id="${escapeHtml(attachment.id)}" title="${escapeHtml(attachment.name)}">
+          ${attachmentMediaMarkup(attachment)}
+          <button class="attachment-remove" type="button" data-remove-attachment="${escapeHtml(attachment.id)}" aria-label="Удалить ${escapeHtml(attachment.name)}"><i data-lucide="x"></i></button>
+        </div>`).join('');
+      requestAnimationFrame(() => strip.classList.add('visible'));
+    } else {
+      strip.classList.remove('visible');
+      strip.hideTimer = setTimeout(() => {
+        if (state.attachments.length) return;
+        strip.innerHTML = '';
+        strip.hidden = true;
+      }, 460);
+    }
+    $('#composer').classList.toggle('has-attachments', hasAttachments);
+    $('.chat-view').classList.toggle('has-attachments', hasAttachments);
+    icons();
+  }
+
+  function addAttachments(files) {
+    [...files].forEach(file => {
+      if (!file || !file.size) return;
+      state.attachments.push({ id: `attachment-${Date.now()}-${Math.random().toString(16).slice(2)}`, name: file.name || 'Файл из буфера', type: file.type || 'application/octet-stream', url: URL.createObjectURL(file) });
+    });
+    renderAttachmentStrip();
+  }
+
+  function removeAttachment(id) {
+    const preview = $(`[data-attachment-id="${CSS.escape(id)}"]`);
+    preview?.classList.add('removing');
+    setTimeout(() => {
+      const attachment = state.attachments.find(item => item.id === id);
+      if (attachment?.url) URL.revokeObjectURL(attachment.url);
+      state.attachments = state.attachments.filter(item => item.id !== id);
+      renderAttachmentStrip();
+    }, 260);
+  }
+
+  function clearComposerAttachments({ preserveUrls = false } = {}) {
+    if (!preserveUrls) state.attachments.forEach(attachment => attachment.url && URL.revokeObjectURL(attachment.url));
+    state.attachments = [];
+    renderAttachmentStrip();
+  }
+
+  function resetChat() {
+    if (state.generating) { showToast('Дождитесь завершения генерации', 'timer'); return; }
+    const conversation = $('#conversation');
+    conversation.classList.add('is-switching');
+    setTimeout(() => {
+      state.activeChatId = null;
+      $('#message-list').innerHTML = '';
+      $('#welcome-state').hidden = false;
+      $('#prompt').value = '';
+      clearComposerAttachments();
+      $('#chat-title').textContent = 'Новый чат';
+      selectModel('gpt-56-sol', { menuMotion: false });
+      renderRecentChats();
+      conversation.scrollTop = 0;
+      conversation.classList.remove('is-switching');
+      showView('chat');
+    }, 180);
+  }
+
+  function resultMarkup(data, context = {}) {
+    const model = context.model || state.model;
+    const filters = context.filters || state.filters;
+    const type = context.type || model.type;
+    const duplicatePrompt = encodeURIComponent(context.prompt || data.title || 'Создай ещё один вариант');
+    const duplicateFilters = encodeURIComponent(JSON.stringify(filters));
+    const meta = type === 'text'
+      ? [`Режим: ${filters.reasoning || 'Авто'}`]
+      : type === 'image'
+        ? [`Формат: ${filters.ratio || '1:1'}`, `Качество: ${filters.quality || '2K'}`]
+        : [`Формат: ${filters.ratio || '16:9'}`, `${filters.duration || 5} сек`, filters.quality || '1080p'];
+    if (type === 'text') {
+      return `<div class="result-card text-result"><span class="result-model-label">${escapeHtml(model.name)}</span><h3>${escapeHtml(data.title)}</h3><p>${escapeHtml(data.content)}</p><div class="result-meta">${meta.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div>`;
+    }
+    const typeClass = type === 'image' ? 'image-result' : 'video-result';
+    const mediaUrl = escapeHtml(data.mediaUrl || (type === 'image' ? '1.jpg' : '1.mp4'));
+    const orientation = fallbackOrientation(filters.ratio || (type === 'video' ? '16:9' : '1:1'));
+    const missingCopy = type === 'image' ? 'Загрузите 1.jpg в папку проекта' : 'Загрузите 1.mp4 в папку проекта';
+    const media = type === 'image'
+      ? `<a class="media-preview-link media-lightbox" href="${mediaUrl}" data-type="image" aria-label="Открыть изображение на весь экран"><img src="${mediaUrl}" alt="${escapeHtml(data.title || 'Результат генерации')}" data-result-media></a>`
+      : `<video src="${mediaUrl}" controls playsinline preload="metadata" data-result-media aria-label="${escapeHtml(data.title || 'Результат генерации')}"></video><a class="media-expand media-lightbox" href="${mediaUrl}" data-type="video" aria-label="Открыть видео на весь экран"><i data-lucide="maximize-2"></i></a>`;
+    return `<div class="result-card media-card orientation-${orientation}"><div class="media-result ${typeClass} orientation-${orientation}"><span class="result-model-label">${escapeHtml(model.name)}</span>${media}<span class="media-missing-copy"><i data-lucide="file-plus-2"></i>${missingCopy}</span></div><div class="result-actions"><a href="${mediaUrl}" download><i data-lucide="download"></i>Скачать</a><button type="button" data-result-action="duplicate" data-result-prompt="${duplicatePrompt}" data-result-model="${escapeHtml(model.id)}" data-result-filters="${duplicateFilters}"><i data-lucide="copy"></i>Дублировать</button></div></div>`;
+  }
+
+  function userMessageMarkup(text, attachments = []) {
+    const previews = attachments.length ? `<div class="message-attachments">${attachments.map(attachment => `<div class="message-attachment" title="${escapeHtml(attachment.name)}">${attachmentMediaMarkup(attachment, true)}</div>`).join('')}</div>` : '';
+    const bubble = text ? `<div class="message-bubble">${escapeHtml(text)}</div>` : '';
+    return `<article class="message user"><div class="user-message-content">${previews}${bubble}</div></article>`;
+  }
+
+  function assistantMessageMarkup(message) {
+    const model = getModel(message.modelId);
+    return `<article class="message assistant"><div class="assistant-content">${resultMarkup(message.data, { model, type: message.type, filters: message.filters, prompt: message.prompt })}</div></article>`;
+  }
+
+  function renderChatMessages(chat) {
+    $('#welcome-state').hidden = true;
+    $('#message-list').innerHTML = chat.messages.map(message => message.role === 'user' ? userMessageMarkup(message.text, message.attachments || []) : assistantMessageMarkup(message)).join('');
+    $('#chat-title').textContent = chat.title;
+    selectModel(chat.modelId, { menuMotion: false });
+    icons();
+    bindResultMedia($('#message-list'));
+  }
+
+  function switchChat(id) {
+    if (state.generating) { showToast('Дождитесь завершения генерации', 'timer'); return; }
+    const chat = state.chats.find(item => item.id === id);
+    if (!chat || chat.id === state.activeChatId) { closeSidebar(); return; }
+    const conversation = $('#conversation');
+    conversation.classList.add('is-switching');
+    closeSidebar();
+    setTimeout(() => {
+      state.activeChatId = chat.id;
+      renderChatMessages(chat);
+      renderRecentChats();
+      conversation.scrollTop = conversation.scrollHeight;
+      requestAnimationFrame(() => conversation.classList.remove('is-switching'));
+    }, 180);
+  }
+
+  function ensureCurrentChat(prompt) {
+    let chat = currentChat();
+    if (chat) return chat;
+    chat = {
+      id: `chat-${Date.now()}`,
+      title: prompt.length > 34 ? `${prompt.slice(0, 34)}…` : prompt,
+      modelId: state.model.id,
+      time: 'сейчас',
+      type: state.model.type,
+      messages: []
+    };
+    state.chats.unshift(chat);
+    state.activeChatId = chat.id;
+    renderRecentChats();
+    persistState();
+    return chat;
+  }
+
+  function addUserMessage(prompt, attachments = []) {
+    $('#message-list').insertAdjacentHTML('beforeend', userMessageMarkup(prompt, attachments));
+    const rendered = $('#message-list').lastElementChild;
+    icons();
+    return rendered;
+  }
+
+  function initWaterOrb(canvas) {
+    const fallback = canvas.parentElement.querySelector('.water-orb-fallback');
+    const gl = canvas.getContext('webgl', { alpha: false, antialias: true, powerPreference: 'high-performance' });
+    if (!gl) {
+      canvas.hidden = true;
+      fallback.hidden = false;
+      return;
+    }
+
+    const vertexSource = `
+      attribute vec2 a_position;
+      void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+    `;
+    const fragmentSource = `
+      precision highp float;
+      uniform vec2 u_resolution;
+      uniform float u_time;
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+      }
+
+      float fbm(vec2 p) {
+        float value = 0.0;
+        float amplitude = 0.52;
+        mat2 turn = mat2(0.82, -0.57, 0.57, 0.82);
+        for (int i = 0; i < 4; i++) {
+          value += amplitude * noise(p);
+          p = turn * p * 1.91 + 7.17;
+          amplitude *= 0.42;
+        }
+        return value;
+      }
+
+      mat2 rotate2d(float angle) {
+        float sine = sin(angle);
+        float cosine = cos(angle);
+        return mat2(cosine, -sine, sine, cosine);
+      }
+
+      void main() {
+        vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+        float t = u_time * 0.001;
+        float flow = t * 0.62;
+        vec2 point = uv * 1.72;
+
+        vec2 warp = vec2(
+          fbm(point * 0.78 + vec2(flow * 0.16, -flow * 0.11)),
+          fbm(point * 0.84 + vec2(-flow * 0.12, flow * 0.14))
+        ) - 0.5;
+        vec2 liquidPoint = rotate2d(sin(flow * 0.22) * 0.38) * (point + warp * 0.42);
+
+        vec2 blobCenterOne = vec2(sin(flow * 0.74) * 0.46, cos(flow * 0.57) * 0.4);
+        vec2 blobCenterTwo = vec2(cos(flow * 0.49) * 0.52, sin(flow * 0.68) * 0.44);
+        vec2 blobCenterThree = vec2(sin(flow * 0.39 + 1.7) * 0.42, cos(flow * 0.63 + 0.8) * 0.48);
+        float blobOne = 1.0 - smoothstep(0.14, 1.12, length(liquidPoint - blobCenterOne));
+        float blobTwo = 1.0 - smoothstep(0.1, 1.04, length(liquidPoint - blobCenterTwo));
+        float blobThree = 1.0 - smoothstep(0.12, 1.08, length(liquidPoint - blobCenterThree));
+
+        vec2 surfaceDrift = vec2(flow * 0.1, -flow * 0.07);
+        float height = fbm(liquidPoint * 0.72 + surfaceDrift);
+        float epsilon = 0.035;
+        float heightX = fbm((liquidPoint + vec2(epsilon, 0.0)) * 0.72 + surfaceDrift);
+        float heightY = fbm((liquidPoint + vec2(0.0, epsilon)) * 0.72 + surfaceDrift);
+        vec3 normal = normalize(vec3((height - heightX) * 4.1, (height - heightY) * 4.1, 0.86));
+        vec3 lightDirection = normalize(vec3(-0.48, 0.56, 0.72));
+        float diffuse = 0.72 + max(dot(normal, lightDirection), 0.0) * 0.28;
+        float specular = pow(max(dot(reflect(-lightDirection, normal), vec3(0.0, 0.0, 1.0)), 0.0), 14.0);
+
+        vec3 liquidDark = vec3(0.065, 0.092, 0.078);
+        vec3 liquidMid = vec3(0.22, 0.35, 0.275);
+        vec3 liquidWarm = vec3(0.48, 0.58, 0.36);
+        vec3 liquidCool = vec3(0.17, 0.34, 0.305);
+        vec3 color = mix(liquidDark, liquidMid, blobOne * 0.78 + height * 0.16);
+        color = mix(color, liquidWarm, blobTwo * 0.5);
+        color = mix(color, liquidCool, blobThree * 0.46);
+        color *= diffuse;
+        color += vec3(0.62, 0.72, 0.57) * specular * 0.14;
+        float edgeShade = smoothstep(0.36, 0.72, max(abs(uv.x), abs(uv.y)));
+        color *= 1.0 - edgeShade * 0.12;
+
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const compile = (type, source) => {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return null;
+      return shader;
+    };
+    const vertex = compile(gl.VERTEX_SHADER, vertexSource);
+    const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
+    if (!vertex || !fragment) {
+      canvas.hidden = true;
+      fallback.hidden = false;
+      return;
+    }
+    const program = gl.createProgram();
+    gl.attachShader(program, vertex);
+    gl.attachShader(program, fragment);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      canvas.hidden = true;
+      fallback.hidden = false;
+      return;
+    }
+
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+    gl.useProgram(program);
+    const position = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    const resolution = gl.getUniformLocation(program, 'u_resolution');
+    const time = gl.getUniformLocation(program, 'u_time');
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const draw = now => {
+      if (!canvas.isConnected) return;
+      const rect = canvas.getBoundingClientRect();
+      const scale = Math.min(devicePixelRatio || 1, 2);
+      const width = Math.max(1, Math.round(rect.width * scale));
+      const height = Math.max(1, Math.round(rect.height * scale));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
+      }
+      gl.uniform2f(resolution, width, height);
+      gl.uniform1f(time, reduceMotion ? 0 : now);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      if (!reduceMotion) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  }
+
+  function addLoader() {
+    const message = document.createElement('article');
+    message.className = 'message assistant';
+    message.innerHTML = `
+      <div class="assistant-content">
+        <div class="generation-render-card">
+          <div class="render-orb-stage"><canvas class="water-orb-canvas" aria-label="Анимация жидкого фона"></canvas><div class="water-orb-fallback" hidden></div></div>
+          <span class="result-model-label">${escapeHtml(state.model.name)}</span>
+          <div class="render-status"><div class="render-status-copy"><strong>Создаю результат</strong><span class="loader-status">Анализирую запрос</span></div><span class="render-percent">8%</span></div>
+        </div>
+      </div>`;
+    $('#message-list').append(message);
+    initWaterOrb($('.water-orb-canvas', message));
+    icons();
+    return message;
+  }
+
+  function scrollConversationToBottom(behavior = 'smooth') {
+    const conversation = $('#conversation');
+    requestAnimationFrame(() => requestAnimationFrame(() => conversation.scrollTo({ top: conversation.scrollHeight, behavior })));
+  }
+
+  async function generate(prompt) {
+    if (state.generating) return;
+    if (appConfig.hasGenerationAccess !== true) {
+      openSubscriptionModal();
+      return;
+    }
+    state.generating = true;
+    $('#welcome-state').hidden = true;
+    const chat = ensureCurrentChat(prompt);
+    const submittedAttachments = state.attachments.map(attachment => ({ ...attachment }));
+    chat.modelId = state.model.id;
+    chat.type = state.model.type;
+    chat.messages.push({ role: 'user', text: prompt, attachments: submittedAttachments });
+    addUserMessage(prompt, submittedAttachments);
+    const loaderMessage = addLoader();
+    $('#chat-title').textContent = chat.title;
+    $('#prompt').value = '';
+    clearComposerAttachments({ preserveUrls: true });
+    scrollConversationToBottom('smooth');
+    setTimeout(() => scrollConversationToBottom('smooth'), 560);
+
+    const status = $('.loader-status', loaderMessage);
+    const percent = $('.render-percent', loaderMessage);
+    const phases = [
+      { value: 28, text: 'Подбираю композицию' },
+      { value: 54, text: state.model.type === 'text' ? 'Формирую ответ' : 'Создаю первый вариант' },
+      { value: 78, text: 'Уточняю детали' },
+      { value: 94, text: 'Подготавливаю результат' }
+    ];
+    let phase = 0;
+    const requestedDelay = Math.max(1000, Number(appConfig.generationDelayMs) || 60000);
+    const interval = setInterval(() => {
+      const next = phases[Math.min(phase, phases.length - 1)];
+      status.textContent = next.text;
+      percent.textContent = `${next.value}%`;
+      phase += 1;
+    }, Math.max(1250, Math.floor(requestedDelay / 5)));
+
+    const generationContext = { model: state.model, type: state.model.type, filters: { ...state.filters }, prompt };
+    let data;
+    const minimumDelay = wait(requestedDelay);
+    try {
+      const request = fetch('api/generate.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': appConfig.csrfToken || '' },
+        body: JSON.stringify({ prompt, model: generationContext.model.name, type: generationContext.type, filters: generationContext.filters })
+      }).then(async response => {
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const error = new Error(body.error || 'Generation request failed');
+          error.code = body.code || '';
+          throw error;
+        }
+        return body;
+      });
+      data = await request;
+      await minimumDelay;
+    } catch (error) {
+      if (error.code === 'subscription_required' || error.code === 'csrf_failed') {
+        clearInterval(interval);
+        loaderMessage.remove();
+        state.generating = false;
+        openSubscriptionModal();
+        return;
+      }
+      await minimumDelay;
+      data = {
+        title: 'Готовый результат',
+        content: 'Запрос обработан в демонстрационном режиме.',
+        mediaUrl: generationContext.type === 'image' ? '1.jpg' : generationContext.type === 'video' ? '1.mp4' : null
+      };
+    } finally {
+      clearInterval(interval);
+    }
+
+    const content = $('.assistant-content', loaderMessage);
+    content.innerHTML = resultMarkup(data, generationContext);
+    chat.messages.push({ role: 'assistant', modelId: generationContext.model.id, type: generationContext.type, filters: generationContext.filters, prompt, data });
+    state.history.unshift({ id: Date.now(), type: generationContext.type, title: data.title || prompt, model: generationContext.model.name, time: 'Только что', excerpt: data.content, mediaUrl: data.mediaUrl || null, ratio: generationContext.filters.ratio || null });
+    $('#history-count').textContent = String(state.history.length);
+    state.generating = false;
+    persistState();
+    icons();
+    bindResultMedia(content);
+    scrollConversationToBottom('smooth');
+    setTimeout(() => scrollConversationToBottom('smooth'), 380);
+  }
+
+  function historyPreview(item) {
+    if (item.type === 'text') return `<div class="history-preview text-preview"><p>${escapeHtml(item.excerpt || 'Готовый текстовый результат сохранён в истории генераций.')}</p></div>`;
+    const mediaUrl = escapeHtml(item.mediaUrl || (item.type === 'image' ? '1.jpg' : '1.mp4'));
+    if (item.type === 'image') return `<a class="history-preview image-preview media-lightbox" href="${mediaUrl}" data-type="image"><img src="${mediaUrl}" alt="${escapeHtml(item.title || 'Изображение')}"></a>`;
+    return `<div class="history-preview video-preview"><video src="${mediaUrl}" muted playsinline preload="metadata"></video><a class="media-lightbox" href="${mediaUrl}" data-type="video" aria-label="Открыть видео"><i data-lucide="play"></i></a></div>`;
+  }
+
+  function renderHistory() {
+    const list = state.historyFilter === 'all' ? state.history : state.history.filter(item => item.type === state.historyFilter);
+    const grid = $('#history-grid');
+    $('#history-count').textContent = String(state.history.length);
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty-history">В этом разделе пока нет генераций</div>';
+      return;
+    }
+    const labels = { text: 'Текст', image: 'Изображение', video: 'Видео' };
+    grid.innerHTML = list.map(item => `
+      <article class="history-card" data-history-type="${item.type}">
+        ${historyPreview(item)}
+        <div class="history-card-body"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.model)} · ${escapeHtml(item.time)}</p><div class="history-card-meta"><span class="history-type">${labels[item.type]}</span><button class="history-card-menu" type="button" aria-label="Действия"><i data-lucide="more-horizontal"></i></button></div></div>
+      </article>`).join('');
+    icons();
+    refreshLightbox();
+  }
+
+  function bindEvents() {
+    document.addEventListener('click', event => {
+      const mediaPreview = event.target.closest('.media-lightbox');
+      if (mediaPreview) {
+        event.preventDefault();
+        if (!mediaLightbox && window.GLightbox) refreshLightbox();
+        if (mediaLightbox) mediaLightbox.open(mediaPreview);
+        else openFallbackMediaViewer(mediaPreview);
+        return;
+      }
+
+      const viewLink = event.target.closest('[data-view-link]');
+      if (viewLink) { event.preventDefault(); showView(viewLink.dataset.viewLink); return; }
+
+      const removeButton = event.target.closest('[data-remove-attachment]');
+      if (removeButton) { removeAttachment(removeButton.dataset.removeAttachment); return; }
+
+      const duplicateButton = event.target.closest('[data-result-action="duplicate"]');
+      if (duplicateButton) {
+        if (appConfig.hasGenerationAccess !== true) { openSubscriptionModal(); return; }
+        if (state.generating) { showToast('Дождитесь завершения генерации', 'timer'); return; }
+        const prompt = decodeURIComponent(duplicateButton.dataset.resultPrompt || '') || 'Создай ещё один вариант';
+        try { state.filters = { ...state.filters, ...JSON.parse(decodeURIComponent(duplicateButton.dataset.resultFilters || '%7B%7D')) }; } catch (error) { /* Keep current filters. */ }
+        selectModel(duplicateButton.dataset.resultModel || state.model.id, { menuMotion: false });
+        showToast('Создаю дубликат', 'copy');
+        setTimeout(() => generate(prompt), 180);
+        return;
+      }
+
+      const recentChat = event.target.closest('[data-chat-id]');
+      if (recentChat) { switchChat(recentChat.dataset.chatId); return; }
+
+      const modelOption = event.target.closest('[data-model-id]');
+      if (modelOption) { selectModel(modelOption.dataset.modelId); return; }
+
+      const filterTrigger = event.target.closest('[data-filter-trigger]');
+      if (filterTrigger) {
+        const menu = $(`[data-filter-menu="${filterTrigger.dataset.filterTrigger}"]`);
+        togglePopover(menu, filterTrigger);
+        return;
+      }
+
+      const filterValue = event.target.closest('[data-filter-value]');
+      if (filterValue) {
+        const control = filterValue.closest('[data-filter-control]');
+        const key = control.dataset.filterControl;
+        state.filters[key] = key === 'duration' ? Number(filterValue.dataset.filterValue) : filterValue.dataset.filterValue;
+        closePopover($(`[data-filter-menu="${key}"]`), $(`[data-filter-trigger="${key}"]`));
+        setTimeout(renderFilters, 210);
+        return;
+      }
+
+      const selectTrigger = event.target.closest('.custom-select-trigger');
+      if (selectTrigger) {
+        const menu = $('.custom-select-menu', selectTrigger.closest('.custom-select'));
+        togglePopover(menu, selectTrigger);
+        return;
+      }
+
+      const selectOption = event.target.closest('[data-select-value]');
+      if (selectOption) {
+        const wrapper = selectOption.closest('.custom-select');
+        const select = $('select', wrapper);
+        const trigger = $('.custom-select-trigger', wrapper);
+        const menu = $('.custom-select-menu', wrapper);
+        select.value = selectOption.dataset.selectValue;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        $('span', trigger).textContent = selectOption.textContent.trim();
+        $$('.custom-select-option', wrapper).forEach(option => option.classList.toggle('active', option === selectOption));
+        closePopover(menu, trigger);
+        return;
+      }
+
+      if (!event.target.closest('.model-control, .header-profile, .profile-menu, .filter-control, .custom-select')) closePopovers();
+    });
+
+    $('#model-trigger').addEventListener('click', () => togglePopover($('#model-menu'), $('#model-trigger')));
+    $('#profile-trigger').addEventListener('click', () => togglePopover($('#profile-menu'), $('#profile-trigger')));
+
+    $('#composer').addEventListener('submit', event => {
+      event.preventDefault();
+      const prompt = $('#prompt').value.trim() || (state.attachments.length ? 'Обработай прикреплённые файлы' : '');
+      if (!prompt) { $('#prompt').focus(); return; }
+      generate(prompt);
+    });
+
+    $('#prompt').addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); $('#composer').requestSubmit(); }
+    });
+
+    $('#prompt').addEventListener('paste', event => {
+      const files = [...(event.clipboardData?.items || [])].map(item => item.kind === 'file' ? item.getAsFile() : null).filter(Boolean);
+      if (!files.length) return;
+      event.preventDefault();
+      addAttachments(files);
+      showToast(files.length === 1 ? 'Медиа добавлено из буфера' : `Добавлено файлов: ${files.length}`, 'image-plus');
+    });
+
+    $$('[data-suggestion]').forEach(button => button.addEventListener('click', () => {
+      $('#prompt').value = button.dataset.suggestion;
+      $('#prompt').focus();
+    }));
+
+    $('#new-chat-button').addEventListener('click', resetChat);
+    $('#clear-chat').addEventListener('click', resetChat);
+    $('#mobile-menu-button').addEventListener('click', toggleSidebar);
+    $('#mobile-backdrop').addEventListener('click', closeSidebar);
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closePopovers(); closeSidebar(); closeSubscriptionModal(); closeFallbackMediaViewer(); }
+    });
+
+    $('#attach-button').addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.accept = 'image/*,video/*,audio/*,.pdf,.txt,.doc,.docx';
+      input.addEventListener('change', () => {
+        if (!input.files.length) return;
+        addAttachments(input.files);
+        showToast(input.files.length === 1 ? `${input.files[0].name} добавлен` : `Добавлено файлов: ${input.files.length}`, 'image-plus');
+      });
+      input.click();
+    });
+
+    $$('.history-tabs button').forEach(button => button.addEventListener('click', () => {
+      state.historyFilter = button.dataset.historyFilter;
+      $$('.history-tabs button').forEach(item => item.classList.toggle('active', item === button));
+      renderHistory();
+    }));
+
+    $('#clear-history').addEventListener('click', () => {
+      state.history = [];
+      renderHistory();
+      persistState();
+      showToast('История очищена', 'trash-2');
+    });
+    $('#save-settings').addEventListener('click', () => showToast('Настройки сохранены'));
+    $('#copy-api-base')?.addEventListener('click', () => copyText($('#api-base-url')?.dataset.copyValue || '', 'Base URL скопирован'));
+    $('#copy-api-key')?.addEventListener('click', () => copyText($('#api-key-value')?.dataset.copyValue || '', 'API-ключ скопирован'));
+    $('#generate-api-key')?.addEventListener('click', generateApiKey);
+    $$('.faq-item > button').forEach(button => button.addEventListener('click', () => button.closest('.faq-item').classList.toggle('open')));
+    $('#subscription-modal-close').addEventListener('click', closeSubscriptionModal);
+    $('#subscription-modal').addEventListener('click', event => { if (event.target.id === 'subscription-modal') closeSubscriptionModal(); });
+    $('#subscription-modal-action').addEventListener('click', () => { closeSubscriptionModal(); showView('pricing'); });
+    $('#media-viewer-close').addEventListener('click', closeFallbackMediaViewer);
+    $('#media-viewer').addEventListener('click', event => { if (event.target.id === 'media-viewer') closeFallbackMediaViewer(); });
+  }
+
+  window.addEventListener('load', () => {
+    if (window.HSStaticMethods) window.HSStaticMethods.autoInit();
+    renderModelMenu();
+    renderFilters();
+    renderHistory();
+    renderRecentChats();
+    enhanceNativeSelects();
+    bindEvents();
+    icons();
+    bindResultMedia();
+    const initialView = location.hash.replace('#', '');
+    if (['chat', 'history', 'settings', 'pricing', 'faq'].includes(initialView)) showView(initialView);
+  });
+})();

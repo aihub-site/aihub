@@ -1,0 +1,53 @@
+(() => {
+  const icons = () => window.lucide && window.lucide.createIcons({ attrs: { 'stroke-width': 1.8 } });
+  const menuButton = document.getElementById('mobile-nav-button');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  const setMenu = open => {
+    menuButton.setAttribute('aria-expanded', String(open));
+    mobileNav.hidden = !open;
+    requestAnimationFrame(() => mobileNav.classList.toggle('visible', open));
+    menuButton.innerHTML = `<i data-lucide="${open ? 'x' : 'menu'}"></i>`;
+    icons();
+  };
+
+  menuButton.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
+  mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+
+  document.querySelectorAll('.faq-item button').forEach(button => button.addEventListener('click', () => {
+    const item = button.closest('.faq-item');
+    const opening = !item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(other => {
+      other.classList.remove('open');
+      other.querySelector('button').setAttribute('aria-expanded', 'false');
+    });
+    if (opening) {
+      item.classList.add('open');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  }));
+
+  const heroVisual = document.getElementById('hero-visual');
+  if (heroVisual && matchMedia('(pointer: fine)').matches) {
+    heroVisual.addEventListener('pointermove', event => {
+      const rect = heroVisual.getBoundingClientRect();
+      heroVisual.style.setProperty('--scene-x', `${((event.clientX - rect.left) / rect.width - .5) * 8}deg`);
+      heroVisual.style.setProperty('--scene-y', `${((event.clientY - rect.top) / rect.height - .5) * -7}deg`);
+    });
+    heroVisual.addEventListener('pointerleave', () => {
+      heroVisual.style.setProperty('--scene-x', '0deg');
+      heroVisual.style.setProperty('--scene-y', '0deg');
+    });
+  }
+
+  const demo = document.getElementById('workspace-demo');
+  document.querySelectorAll('[data-feature]').forEach(row => row.addEventListener('click', () => {
+    document.querySelectorAll('[data-feature]').forEach(item => item.classList.toggle('active', item === row));
+    demo.dataset.state = row.dataset.feature;
+    demo.classList.remove('refreshing');
+    requestAnimationFrame(() => demo.classList.add('refreshing'));
+  }));
+
+  icons();
+  window.HSStaticMethods?.autoInit();
+})();
